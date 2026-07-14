@@ -62,7 +62,7 @@
     letter-spacing: 0.08em; text-transform: uppercase;
     transition: background 0.2s;
   }
-  .cart-btn:hover { background: #222; }
+  .cart-btn:hover { background: #5b21b6; }
   .cart-badge {
     background: var(--surface); color: var(--accent);
     width: 20px; height: 20px; border-radius: 50%;
@@ -157,16 +157,6 @@
     display: flex; gap: 8px; flex-wrap: wrap;
     border-bottom: 1px solid var(--border);
   }
-  .filter-btn {
-    padding: 8px 20px; font-size: 12px; letter-spacing: 0.08em;
-    text-transform: uppercase; background: none;
-    border: 1px solid var(--border); color: var(--muted);
-    cursor: pointer; transition: all 0.2s; font-family: inherit;
-  }
-  .filter-btn.active, .filter-btn:hover {
-    background: var(--ink); color: var(--cream); border-color: var(--ink);
-  }
-
   /* PRODUCTS */
   .products-section { padding: 48px; }
   .products-grid {
@@ -321,7 +311,7 @@
     font-size: 16px; display: flex; align-items: center;
     justify-content: center; transition: all 0.2s; color: var(--ink);
   }
-  .qty-btn:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .qty-btn:hover { background: var(--accent); color: var(--surface); border-color: var(--accent); }
   .qty-num {
     width: 36px; height: 28px; border: 1px solid var(--border);
     border-left: none; border-right: none;
@@ -353,12 +343,12 @@
   }
   .checkout-btn {
     width: 100%; padding: 16px;
-    background: var(--ink); color: var(--cream);
+    background: var(--accent); color: var(--surface);
     border: none; font-family: 'DM Sans', sans-serif;
     font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
     cursor: pointer; transition: background 0.2s; margin-bottom: 12px;
   }
-  .checkout-btn:hover { background: #222; }
+  .checkout-btn:hover { background: #5b21b6; }
 
   /* CHECKOUT MODAL */
   .checkout-modal {
