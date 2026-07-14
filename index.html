@@ -15,7 +15,6 @@
     --accent: #7c3aed;
     --accent-light: #ede9fe;
     --cream: #ffffff;
-    --gold: #7c3aed;
     --muted: #64748b;
     --surface: #ffffff;
     --border: #e2e8f0;
@@ -122,6 +121,39 @@
     color: var(--ink);
   }
 
+  .editorial-intro { padding: 40px 48px 0; }
+  .editorial-intro-copy {
+    margin-top: 12px; max-width: 560px; color: var(--muted);
+    line-height: 1.8; font-size: 15px;
+  }
+  .editorial-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px; padding: 24px 48px 40px;
+  }
+  .editorial-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 28px; padding: 32px; box-shadow: var(--shadow);
+    display: grid; gap: 16px;
+  }
+  .editorial-card span {
+    display: inline-block; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent); font-weight: 700;
+  }
+  .editorial-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; margin: 0; line-height: 1.1;
+  }
+  .editorial-card p {
+    margin: 0; color: var(--muted); line-height: 1.8;
+  }
+  .editorial-btn {
+    width: fit-content; padding: 12px 22px; background: var(--accent);
+    color: var(--surface); border: none; border-radius: 999px;
+    cursor: pointer; text-transform: uppercase; letter-spacing: 0.12em;
+    font-size: 12px; transition: background 0.2s;
+  }
+  .editorial-btn:hover { background: #5b21b6; }
+
   /* FILTERS */
   .filters {
     padding: 24px 48px;
@@ -171,14 +203,17 @@
   .product-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(10,10,10,0.12); border-color: #d9d2c7; }
   .product-img {
     width: 100%; aspect-ratio: 4/5; overflow: hidden;
-    background: radial-gradient(circle at top right, rgba(124,58,237,0.16), transparent 35%), #f8fbff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 72px; position: relative;
+    background: #f8fbff;
+    display: grid; place-items: center;
+    position: relative;
+  }
+  .product-img img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
   }
   .product-img::before {
     content: '';
     position: absolute; inset: 0;
-    background: radial-gradient(circle at center, rgba(255,255,255,0.6), transparent 55%);
+    background: radial-gradient(circle at center, rgba(255,255,255,0.45), transparent 55%);
     pointer-events: none;
   }
   .product-badge {
@@ -291,7 +326,10 @@
   .cart-item-img {
     width: 72px; height: 90px; background: #f0ece4;
     display: flex; align-items: center; justify-content: center;
-    font-size: 32px; flex-shrink: 0;
+    overflow: hidden; border-radius: 20px; flex-shrink: 0;
+  }
+  .cart-item-img img {
+    width: 100%; height: 100%; object-fit: cover;
   }
   .cart-item-details { flex: 1; }
   .cart-item-name {
@@ -476,8 +514,10 @@
 <nav>
   <div class="nav-logo">Serene <span>Haven</span></div>
   <div class="nav-actions">
-    <button class="nav-link" onclick="showSection('shop')">Shop</button>
-    <button class="nav-link" onclick="showSection('shop')">Wellness</button>
+    <button class="nav-link" onclick="showSection('home')">Home</button>
+    <button class="nav-link" onclick="showSection('bestSellers')">Best Sellers</button>
+    <button class="nav-link" onclick="showSection('newArrivals')">New Arrivals</button>
+    <button class="nav-link" onclick="showSection('productsGrid')">Shop</button>
     <button class="cart-btn" onclick="openCart()">
       🛍 Cart
       <span class="cart-badge" id="cartCount">0</span>
@@ -486,7 +526,7 @@
 </nav>
 
 <!-- HERO -->
-<div class="hero" id="shop">
+<div class="hero" id="home">
   <div class="hero-copy">
     <div class="hero-sub">Wellness at Home</div>
     <h1>Mindful <em>living</em><br>for every room</h1>
@@ -500,6 +540,21 @@
     <button class="add-btn" onclick="addToCart(1)">+ Add to Bag</button>
   </div>
 </div>
+
+<section class="editorial-grid">
+  <article class="editorial-card" id="bestSellers">
+    <span>Best Sellers</span>
+    <h3>Rituals & decor favorites</h3>
+    <p>Top-rated essentials chosen by our community for calm mornings and restorative evenings.</p>
+    <button class="editorial-btn" onclick="showSection('productsGrid')">Shop Best Sellers</button>
+  </article>
+  <article class="editorial-card" id="newArrivals">
+    <span>New Arrivals</span>
+    <h3>Fresh ritual pieces</h3>
+    <p>Discover new releases designed to bring soft texture, scent, and ease into your home sanctuary.</p>
+    <button class="editorial-btn" onclick="showSection('productsGrid')">Explore New Arrivals</button>
+  </article>
+</section>
 
 <!-- FILTERS -->
 <div class="filters">
@@ -617,18 +672,18 @@
 <script>
 // ─── DATA ────────────────────────────────────────────────────
 const products = [
-  { id:1, name:'Dawn Dew Mist', category:'wellness', price:42, emoji:'🌿', badge:'Best seller', desc:'A refreshing linen and body mist with lavender, citrus, and green tea.', rating: 4.9, reviews: 210, shipping: 'Free ship' },
-  { id:2, name:'Moonstone Body Oil', category:'wellness', price:58, emoji:'🌙', badge:'New', desc:'Nourishing oil blend with jasmine, rose, and pearl extract for radiant skin.', rating: 4.8, reviews: 144, shipping: 'Fast ship' },
-  { id:3, name:'Ritual Tea Set', category:'rituals', price:72, emoji:'🍵', badge:'New', desc:'Soothing herbal tea trio with chamomile, lavender, and adaptogen blends.', rating: 4.9, reviews: 89, shipping: 'Free ship' },
-  { id:4, name:'Harmony Candle Set', category:'decor', price:88, emoji:'🕯️', badge:null, desc:'Hand-poured candles in glass vessels with calming cedarwood and sage.', rating: 4.7, reviews: 121, shipping: 'Free ship' },
-  { id:5, name:'Botanic Ritual Bundle', category:'rituals', price:132, emoji:'🧺', badge:'Limited', desc:'Spa ritual collection with body scrub, bath soak, and calming mist.', rating: 4.8, reviews: 72, shipping: 'Fast ship' },
-  { id:6, name:'Linen Wellness Pillow', category:'essentials', price:95, emoji:'🪶', badge:null, desc:'Soft linen pillowcase with copper thread for cooling comfort through the night.', rating: 4.7, reviews: 98, shipping: 'Free ship' },
-  { id:7, name:'Herbal Scented Tray', category:'decor', price:105, emoji:'🪴', badge:null, desc:'Minimalist tray with dried herbs and a ceramic diffuser for shelf styling.', rating: 4.6, reviews: 57, shipping: 'Free ship' },
-  { id:8, name:'Bamboo Bath Caddy', category:'essentials', price:68, emoji:'🛁', badge:null, desc:'Extendable bamboo bath tray with candle holder and tablet rest.', rating: 4.8, reviews: 163, shipping: 'Fast ship' },
-  { id:9, name:'Silk Eye Pillow', category:'essentials', price:38, emoji:'😌', badge:'Best seller', desc:'Weighted silk eye pillow infused with lavender for restful sleep.', rating: 4.9, reviews: 134, shipping: 'Free ship' },
-  { id:10, name:'Sage & Pearl Diffuser', category:'decor', price:112, emoji:'🪔', badge:'Limited', desc:'Ceramic diffuser with sage, pearl, and warm sandalwood for serene spaces.', rating: 4.8, reviews: 64, shipping: 'Free ship' },
-  { id:11, name:'Willow Wellness Robe', category:'essentials', price:148, emoji:'🧥', badge:null, desc:'Lightweight organic cotton robe with a relaxed fit for home comfort.', rating: 4.7, reviews: 77, shipping: 'Fast ship' },
-  { id:12, name:'Golden Calm Candle', category:'rituals', price:54, emoji:'✨', badge:'New', desc:'A luminous meditation candle with frankincense, myrrh, and honey notes.', rating: 4.8, reviews: 48, shipping: 'Free ship' },
+  { id:1, name:'Dawn Dew Mist', category:'wellness', price:42, image:'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&w=800&q=80', badge:'Best seller', desc:'A refreshing linen and body mist with lavender, citrus, and green tea.', rating: 4.9, reviews: 210, shipping: 'Free ship' },
+  { id:2, name:'Moonstone Body Oil', category:'wellness', price:58, image:'https://images.unsplash.com/photo-1512418490979-92798cec3b6d?auto=format&fit=crop&w=800&q=80', badge:'New', desc:'Nourishing oil blend with jasmine, rose, and pearl extract for radiant skin.', rating: 4.8, reviews: 144, shipping: 'Fast ship' },
+  { id:3, name:'Ritual Tea Set', category:'rituals', price:72, image:'https://images.unsplash.com/photo-1488747279002-c8523379faaa?auto=format&fit=crop&w=800&q=80', badge:'New', desc:'Soothing herbal tea trio with chamomile, lavender, and adaptogen blends.', rating: 4.9, reviews: 89, shipping: 'Free ship' },
+  { id:4, name:'Harmony Candle Set', category:'decor', price:88, image:'https://images.unsplash.com/photo-1516684669134-de6ff5cd49f5?auto=format&fit=crop&w=800&q=80', badge:null, desc:'Hand-poured candles in glass vessels with calming cedarwood and sage.', rating: 4.7, reviews: 121, shipping: 'Free ship' },
+  { id:5, name:'Botanic Ritual Bundle', category:'rituals', price:132, image:'https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=800&q=80', badge:'Limited', desc:'Spa ritual collection with body scrub, bath soak, and calming mist.', rating: 4.8, reviews: 72, shipping: 'Fast ship' },
+  { id:6, name:'Linen Wellness Pillow', category:'essentials', price:95, image:'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80', badge:null, desc:'Soft linen pillowcase with copper thread for cooling comfort through the night.', rating: 4.7, reviews: 98, shipping: 'Free ship' },
+  { id:7, name:'Herbal Scented Tray', category:'decor', price:105, image:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80', badge:null, desc:'Minimalist tray with dried botanicals and a ceramic diffuser for shelf styling.', rating: 4.6, reviews: 57, shipping: 'Free ship' },
+  { id:8, name:'Bamboo Bath Caddy', category:'essentials', price:68, image:'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80', badge:null, desc:'Extendable bamboo bath tray with candle holder and tablet rest.', rating: 4.8, reviews: 163, shipping: 'Fast ship' },
+  { id:9, name:'Silk Eye Pillow', category:'essentials', price:38, image:'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80', badge:'Best seller', desc:'Weighted silk eye pillow infused with lavender for restful sleep.', rating: 4.9, reviews: 134, shipping: 'Free ship' },
+  { id:10, name:'Sage & Pearl Diffuser', category:'decor', price:112, image:'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=800&q=80', badge:'Limited', desc:'Ceramic diffuser with sage, pearl, and warm sandalwood for serene spaces.', rating: 4.8, reviews: 64, shipping: 'Free ship' },
+  { id:11, name:'Willow Wellness Robe', category:'essentials', price:148, image:'https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=800&q=80', badge:null, desc:'Lightweight organic cotton robe with a relaxed fit for home comfort.', rating: 4.7, reviews: 77, shipping: 'Fast ship' },
+  { id:12, name:'Golden Calm Candle', category:'rituals', price:54, image:'https://images.unsplash.com/photo-1516382799839-6ea83d1c00ba?auto=format&fit=crop&w=800&q=80', badge:'New', desc:'A luminous meditation candle with frankincense, myrrh, and honey notes.', rating: 4.8, reviews: 48, shipping: 'Free ship' },
 ];
 
 let cart = [];
@@ -644,7 +699,7 @@ function renderProducts(filter='all') {
     <div class="product-card">
       <div class="product-img">
         ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
-        ${p.emoji}
+        <img src="${p.image}" alt="${p.name}" />
       </div>
       <div class="product-info">
         <div>
@@ -732,7 +787,7 @@ function renderCartItems() {
 
   container.innerHTML = cart.map(item => `
     <div class="cart-item">
-      <div class="cart-item-img">${item.emoji}</div>
+      <div class="cart-item-img"><img src="${item.image}" alt="${item.name}" /></div>
       <div class="cart-item-details">
         <div class="cart-item-name">${item.name}</div>
         <div class="cart-item-price">$${item.price}.00 each</div>
