@@ -71,22 +71,79 @@
   /* HERO */
   .hero {
     padding: 80px 48px 60px;
-    display: flex; align-items: flex-end; gap: 16px;
+    display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+    align-items: center; gap: 40px;
     border-bottom: 1px solid var(--border);
+  }
+  .hero-copy {
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  .hero-sub {
+    font-size: 12px; letter-spacing: 0.18em; color: var(--muted);
+    text-transform: uppercase; margin-bottom: 12px; display: inline-block;
   }
   .hero h1 {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(56px, 8vw, 108px);
-    font-weight: 300; line-height: 0.9;
-    letter-spacing: -0.02em;
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 300; line-height: 0.95;
+    letter-spacing: -0.03em;
   }
   .hero h1 em { font-style: italic; color: var(--gold); }
-  .hero-sub {
-    font-size: 13px; letter-spacing: 0.1em; color: var(--muted);
-    text-transform: uppercase; margin-bottom: 12px; padding-left: 4px;
+  .hero-copy p {
+    max-width: 520px; color: var(--muted); line-height: 1.8; font-size: 15px;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 26px; background: var(--ink); color: var(--cream);
+    border: none; cursor: pointer; text-transform: uppercase;
+    letter-spacing: 0.12em; font-size: 12px; transition: background 0.2s;
+  }
+  .hero-cta:hover { background: #222; }
+  .hero-feature {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 24px; padding: 32px; display: grid;
+    gap: 18px; box-shadow: var(--shadow);
+  }
+  .hero-feature h2 {
+    margin: 0; font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 600;
+  }
+  .hero-feature p { margin: 0; color: var(--muted); line-height: 1.7; }
+  .hero-feature .feature-price {
+    font-family: 'Cormorant Garamond', serif; font-size: 32px;
+    color: var(--ink);
   }
 
   /* FILTERS */
+  .filters {
+    padding: 24px 48px;
+    display: flex; gap: 8px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-btn {
+    padding: 10px 20px; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; background: var(--surface);
+    border: 1px solid var(--border); color: var(--muted);
+    cursor: pointer; transition: transform 0.2s, color 0.2s, border-color 0.2s;
+    border-radius: 999px; font-family: inherit;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--ink); color: var(--cream); border-color: var(--ink);
+    transform: translateY(-1px);
+  }
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; margin-bottom: 24px;
+    padding: 0 48px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 600;
+  }
+  .product-count {
+    color: var(--muted); font-size: 13px; letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
   .filters {
     padding: 24px 48px;
     display: flex; gap: 8px; flex-wrap: wrap;
@@ -138,11 +195,18 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 20px; font-weight: 600; margin-bottom: 4px;
   }
-  .product-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
-  .product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .product-desc { font-size: 14px; color: var(--muted); margin-bottom: 16px; line-height: 1.7; min-height: 68px; }
+  .product-footer {
+    display: grid; grid-template-columns: auto auto;
+    align-items: center; gap: 12px;
+  }
   .product-price {
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px; font-weight: 600;
+  }
+  .product-tagline {
+    margin-top: 4px; color: var(--muted); font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
   }
   .product-price .cents { font-size: 14px; vertical-align: super; }
   .add-btn {
@@ -395,9 +459,17 @@
 
 <!-- HERO -->
 <div class="hero" id="shop">
-  <div>
+  <div class="hero-copy">
     <div class="hero-sub">New Season Collection</div>
-    <h1>Curated <em>Luxury</em><br>Objects</h1>
+    <h1>Curated <em>Luxury</em><br>Objects for Home</h1>
+    <p>Discover elevated essentials designed to bring calm, warmth, and refined detail to every room. Shop handcrafted fragrance, skincare, and decor with a modern boutique aesthetic.</p>
+    <button class="hero-cta" onclick="showSection('productsGrid')">Shop New Arrivals</button>
+  </div>
+  <div class="hero-feature">
+    <h2>Featured product</h2>
+    <p>Soft satin, luminous scent, and a polished finish make this limited-edition piece a perfect gift for a treasured space.</p>
+    <div class="feature-price">$78.00</div>
+    <button class="add-btn" onclick="addToCart(9)">+ Add to Bag</button>
   </div>
 </div>
 
@@ -411,6 +483,12 @@
 </div>
 
 <!-- PRODUCTS -->
+<section class="section-header">
+  <div>
+    <div class="section-title">Shop the Collection</div>
+  </div>
+  <div class="product-count" id="productCount">8 items</div>
+</section>
 <section class="products-section">
   <div class="products-grid" id="productsGrid"></div>
 </section>
@@ -519,6 +597,7 @@ const products = [
   { id:6, name:'Leather Wallet', category:'accessories', price:195, emoji:'👜', badge:null, desc:'Full-grain calfskin leather with 8 card slots. Slim profile design.' },
   { id:7, name:'Marble Diffuser', category:'home', price:135, emoji:'🪨', badge:'New', desc:'Cold-press marble vessel with organic reed sticks. 200ml cedar & sage.' },
   { id:8, name:'Linen Candle', category:'home', price:68, emoji:'🕯', badge:null, desc:'Hand-poured soy wax with jasmine and sandalwood. 45hr burn time.' },
+  { id:9, name:'Satin Pillowcase', category:'home', price:78, emoji:'🛏️', badge:'New', desc:'Silky satin finish for glowing skin and gentler sleep. 50×75cm.' },
 ];
 
 let cart = [];
@@ -527,7 +606,9 @@ let currentFilter = 'all';
 // ─── PRODUCTS ────────────────────────────────────────────────
 function renderProducts(filter='all') {
   const grid = document.getElementById('productsGrid');
+  const count = document.getElementById('productCount');
   const list = filter === 'all' ? products : products.filter(p => p.category === filter);
+  count.textContent = `${list.length} item${list.length === 1 ? '' : 's'}`;
   grid.innerHTML = list.map(p => `
     <div class="product-card">
       <div class="product-img">
@@ -539,7 +620,10 @@ function renderProducts(filter='all') {
         <div class="product-name">${p.name}</div>
         <div class="product-desc">${p.desc}</div>
         <div class="product-footer">
-          <div class="product-price">$${p.price}<span class="cents">.00</span></div>
+          <div>
+            <div class="product-price">$${p.price}<span class="cents">.00</span></div>
+            <div class="product-tagline">Shop the luxe edit.</div>
+          </div>
           <button class="add-btn" id="addBtn${p.id}" onclick="addToCart(${p.id})">
             + Add
           </button>
