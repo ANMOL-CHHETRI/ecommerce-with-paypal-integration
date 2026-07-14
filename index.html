@@ -170,43 +170,64 @@
     background: var(--surface);
     border: 1px solid var(--border);
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
     position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
   }
-  .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .product-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(10,10,10,0.12); border-color: #d9d2c7; }
   .product-img {
     width: 100%; aspect-ratio: 4/5; overflow: hidden;
-    background: #f0ece4;
+    background: radial-gradient(circle at top left, rgba(201,168,76,0.18), transparent 40%), #f7f4ef;
     display: flex; align-items: center; justify-content: center;
     font-size: 72px; position: relative;
   }
+  .product-img::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.6), transparent 55%);
+    pointer-events: none;
+  }
   .product-badge {
-    position: absolute; top: 12px; left: 12px;
+    position: absolute; top: 14px; left: 14px;
     background: var(--gold); color: var(--ink);
     font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 4px 10px; font-weight: 500;
+    padding: 6px 12px; font-weight: 600; border-radius: 999px;
   }
-  .product-info { padding: 20px; }
+  .product-info { padding: 24px; display: grid; gap: 18px; flex: 1; }
   .product-category {
-    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
     color: var(--muted); margin-bottom: 6px;
   }
   .product-name {
     font-family: 'Cormorant Garamond', serif;
     font-size: 20px; font-weight: 600; margin-bottom: 4px;
   }
-  .product-desc { font-size: 14px; color: var(--muted); margin-bottom: 16px; line-height: 1.7; min-height: 68px; }
+  .product-desc { font-size: 14px; color: var(--muted); margin-bottom: 12px; line-height: 1.75; min-height: 70px; }
+  .product-meta {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; flex-wrap: wrap;
+  }
+  .rating-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--muted);
+  }
+  .rating-row .stars {
+    display: inline-flex; gap: 2px; color: var(--gold);
+    font-size: 14px;
+  }
+  .product-pill {
+    background: rgba(201,168,76,0.15);
+    color: #7a5d1d;
+    padding: 6px 10px; border-radius: 999px;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
   .product-footer {
-    display: grid; grid-template-columns: auto auto;
-    align-items: center; gap: 12px;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end; gap: 14px;
   }
   .product-price {
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px; font-weight: 600;
-  }
-  .product-tagline {
-    margin-top: 4px; color: var(--muted); font-size: 11px;
-    letter-spacing: 0.08em; text-transform: uppercase;
   }
   .product-price .cents { font-size: 14px; vertical-align: super; }
   .add-btn {
@@ -433,12 +454,23 @@
   .toast.show { transform: translateX(-50%) translateY(0); }
 
   @media (max-width: 640px) {
-    nav { padding: 0 20px; }
-    .hero { padding: 40px 20px 30px; }
-    .filters { padding: 16px 20px; }
+    nav { padding: 0 16px; }
+    .nav-actions { gap: 16px; }
+    .hero { padding: 40px 20px 30px; grid-template-columns: 1fr; }
+    .hero-feature { padding: 24px; }
+    .filters { padding: 16px 20px; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; }
+    .filter-btn { flex: 0 0 auto; }
+    .section-header { padding: 0 20px 10px; }
     .products-section { padding: 24px 20px; }
-    .modal-body { padding: 24px 20px; }
+    .products-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+    .product-card { min-width: 240px; }
+    .product-info { padding: 18px; }
+    .product-footer { grid-template-columns: 1fr; }
+    .checkout-modal { align-items: flex-end; padding: 18px; }
+    .modal-box { width: 100%; max-height: 88vh; }
+    .modal-body { padding: 20px; }
     .form-row { grid-template-columns: 1fr; }
+    .cart-panel { width: 100vw; max-width: 100%; }
   }
 </style>
 </head>
@@ -589,15 +621,15 @@
 <script>
 // ─── DATA ────────────────────────────────────────────────────
 const products = [
-  { id:1, name:'Oud Noir', category:'fragrance', price:185, emoji:'🕯️', badge:'Bestseller', desc:'Dark woods, amber resin, and smoky vetiver. 50ml Eau de Parfum.' },
-  { id:2, name:'Velvet Rose', category:'fragrance', price:145, emoji:'🌹', badge:null, desc:'Bulgarian rose, patchouli, and white musk. 50ml Eau de Toilette.' },
-  { id:3, name:'Caviar Serum', category:'skincare', price:220, emoji:'✨', badge:'New', desc:'Caviar extract and retinol complex. Firm and illuminate overnight.' },
-  { id:4, name:'Gold Eye Cream', category:'skincare', price:98, emoji:'🌟', badge:null, desc:'24K gold peptides reduce fine lines and puffiness around the eye.' },
-  { id:5, name:'Silk Scarf', category:'accessories', price:260, emoji:'🧣', badge:'Limited', desc:'Hand-painted 100% mulberry silk. 90×90cm. Made in Como, Italy.' },
-  { id:6, name:'Leather Wallet', category:'accessories', price:195, emoji:'👜', badge:null, desc:'Full-grain calfskin leather with 8 card slots. Slim profile design.' },
-  { id:7, name:'Marble Diffuser', category:'home', price:135, emoji:'🪨', badge:'New', desc:'Cold-press marble vessel with organic reed sticks. 200ml cedar & sage.' },
-  { id:8, name:'Linen Candle', category:'home', price:68, emoji:'🕯', badge:null, desc:'Hand-poured soy wax with jasmine and sandalwood. 45hr burn time.' },
-  { id:9, name:'Satin Pillowcase', category:'home', price:78, emoji:'🛏️', badge:'New', desc:'Silky satin finish for glowing skin and gentler sleep. 50×75cm.' },
+  { id:1, name:'Oud Noir', category:'fragrance', price:185, emoji:'🕯️', badge:'Bestseller', desc:'Dark woods, amber resin, and smoky vetiver. 50ml Eau de Parfum.', rating: 4.9, reviews: 182, shipping: 'Free ship' },
+  { id:2, name:'Velvet Rose', category:'fragrance', price:145, emoji:'🌹', badge:null, desc:'Bulgarian rose, patchouli, and white musk. 50ml Eau de Toilette.', rating: 4.8, reviews: 147, shipping: 'Fast ship' },
+  { id:3, name:'Caviar Serum', category:'skincare', price:220, emoji:'✨', badge:'New', desc:'Caviar extract and retinol complex. Firm and illuminate overnight.', rating: 5.0, reviews: 74, shipping: 'Free ship' },
+  { id:4, name:'Gold Eye Cream', category:'skincare', price:98, emoji:'🌟', badge:null, desc:'24K gold peptides reduce fine lines and puffiness around the eye.', rating: 4.7, reviews: 93, shipping: 'Fast ship' },
+  { id:5, name:'Silk Scarf', category:'accessories', price:260, emoji:'🧣', badge:'Limited', desc:'Hand-painted 100% mulberry silk. 90×90cm. Made in Como, Italy.', rating: 4.9, reviews: 63, shipping: 'Free ship' },
+  { id:6, name:'Leather Wallet', category:'accessories', price:195, emoji:'👜', badge:null, desc:'Full-grain calfskin leather with 8 card slots. Slim profile design.', rating: 4.8, reviews: 108, shipping: 'Fast ship' },
+  { id:7, name:'Marble Diffuser', category:'home', price:135, emoji:'🪨', badge:'New', desc:'Cold-press marble vessel with organic reed sticks. 200ml cedar & sage.', rating: 4.9, reviews: 88, shipping: 'Free ship' },
+  { id:8, name:'Linen Candle', category:'home', price:68, emoji:'🕯', badge:null, desc:'Hand-poured soy wax with jasmine and sandalwood. 45hr burn time.', rating: 4.6, reviews: 132, shipping: 'Free ship' },
+  { id:9, name:'Satin Pillowcase', category:'home', price:78, emoji:'🛏️', badge:'New', desc:'Silky satin finish for glowing skin and gentler sleep. 50×75cm.', rating: 4.8, reviews: 57, shipping: 'Fast ship' },
 ];
 
 let cart = [];
@@ -616,18 +648,23 @@ function renderProducts(filter='all') {
         ${p.emoji}
       </div>
       <div class="product-info">
-        <div class="product-category">${p.category}</div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-desc">${p.desc}</div>
-        <div class="product-footer">
-          <div>
-            <div class="product-price">$${p.price}<span class="cents">.00</span></div>
-            <div class="product-tagline">Shop the luxe edit.</div>
-          </div>
-          <button class="add-btn" id="addBtn${p.id}" onclick="addToCart(${p.id})">
-            + Add
-          </button>
+        <div>
+          <div class="product-category">${p.category}</div>
+          <div class="product-name">${p.name}</div>
         </div>
+        <div class="rating-row">
+          <span class="stars">★★★★★</span>
+          <span>${p.rating}</span>
+          <span>(${p.reviews})</span>
+        </div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-meta">
+          <div class="product-pill">${p.shipping}</div>
+          <div class="product-price">$${p.price}<span class="cents">.00</span></div>
+        </div>
+        <button class="add-btn" id="addBtn${p.id}" onclick="addToCart(${p.id})">
+          + Add to Bag
+        </button>
       </div>
     </div>
   `).join('');
